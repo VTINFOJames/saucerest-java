@@ -1,0 +1,34 @@
+import com.saucelabs.saucerest.SauceREST;
+
+/* You will need to download the saucerest jar and the json-simple-1.1.1.jar 
+and add them to your projects build path. You can download the jars from the
+following sites:
+http://mvnrepository.com/artifact/com.saucelabs/sauce-rest-api/1.1
+https://code.google.com/p/json-simple/downloads/list 
+*/
+
+private void sauceRestClient() {
+
+    /* Get the JobID for your SauceLabs session 
+    * Note: The JobID is the SessionID */
+    jobId = driver.getSessionId().toString();
+		
+		/* Initialize the SacueRest client using your SauceLabs
+		user ID and access key */
+		String[] restArray = {"yoursauceuser", "yoursaucekey"};   	
+    SauceREST client = new SauceREST(restArray[0], restArray[1]);
+  	
+  	/* Specify the header key values to send in to update the SauceLabs test with.
+  	 * Accepted key values are: 
+  	 * name: string, public: string, tags: array, build: integer, passed: boolean, 
+  	 * custom-data: JSON object
+  	 * Note: I am only updating the passed flag below. */
+  	Map<String, Object> updates = new HashMap<String, Object>();
+    updates.put("passed", true);
+    client.updateJobInfo(jobId, updates);
+      
+    /* Get the response from SauceLabs */
+    String response = client.getJobInfo(jobId);		
+    System.out.println(response);   
+        
+	}
